@@ -175,26 +175,17 @@ pipeline {
 
     stage('Continuous Deployment') {
       when {
-        allOf {
-          anyOf {
-            changeset "docker/**"
-            changeset "docs/**"
-            changeset "pom.xml"
-            changeset "src/main/**"
-            triggeredBy cause: 'UserIdCause'
-          }
           expression {
             return env.GIT_BRANCH == 'origin/master';
           }
         }
-      }
       stages {
         stage('Push Images') {
           steps {
             script {
               docker.withRegistry( registryUri, registryCredential ) {
-                devImage.push("5.6.0-alpha-${env.GIT_HASH}")
-                deplImage.push("5.6.0-alpha-${env.GIT_HASH}")
+                devImage.push("6.0.0-alpha-${env.GIT_HASH}")
+                deplImage.push("6.0.0-alpha-${env.GIT_HASH}")
               }
             }
           }
